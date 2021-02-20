@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 import sys
 
-from ai import AI, FakeAI, AI2
+from ai import AI, FakeAI, AI2, AIMinimax
 from field import Field
 
 
@@ -18,7 +18,7 @@ def get_args():
     parser.add_argument('-c', '--coef')
     parser.add_argument('-g', '--games')
     args = parser.parse_args()
-    
+
 
     if args.coef:
         if not args.coef.isdigit():
@@ -60,7 +60,8 @@ def game(ai_x, ai_o):
 ai_types = {
     'fake': FakeAI,
     'simple': AI,
-    'prog': AI2
+    'prog': AI2,
+    'minimax': AIMinimax
 }
 
 aix_type, aio_type, coef, games = get_args()

@@ -1,4 +1,5 @@
 import pickle
+import random
 
 import numpy as np
 
@@ -144,6 +145,57 @@ class AI2(AI):
             self._correct_sum(state)
             delta **= 0.7
         self.path = []
+
+
+class AIMinimax:
+    def __init__(self, init_data_file=None, size=3, learning_coef=None, **kwargs):
+        self.size = size
+
+    def save_data(self, filename):
+        pass
+
+    def choice(self, state):
+        field = Field(state, self.size)
+        if field.count_x() == field.count_o():
+            sign = 2
+        else:
+            sign = 1
+        _, step = self._choice(field, sign)
+        return step
+
+    def _choice(self, field, sign):
+        ''' Minimax '''
+        empty = field.empty_cells()
+        if field.check_win(3 - sign):
+            return -1, None
+        elif not empty:
+            return 0, None
+        else:
+            wins = []
+            draws = []
+            for step in empty:
+                field[step] = sign
+                result, _ = self._choice(field, 3 - sign)
+                field[step] = 0
+                if result == -1:
+                    wins.append(step)
+                elif result == 0:
+                    draws.append(step)
+            if wins:
+                return 1, random.choice(wins)
+            elif draws:
+                return 0, random.choice(draws)
+            else:
+                return -1, random.choice(empty)
+
+    def generate_weights(self, data_length, size):
+        pass
+
+    def correct(self, result):
+        pass
+
+    def normalize(self):
+        pass
 
 
 def generate_data():
